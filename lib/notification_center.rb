@@ -9,6 +9,7 @@ module NotificationCenter
     def events= hash; @@events = hash end
 
     def flush_cache!; @cache = nil end
+
     def _initialize_event_store
       @@events = Hash.new Array.new
     end
@@ -22,9 +23,8 @@ module NotificationCenter
     end
 
     def _notify! event, *args
-      event_handler = "#{event}_handler"
+      event_handler = "#{event}_#{method_suffix}"
       receivers = @@events[event]
-
       for receiver in receivers
         receiver.send event_handler, *args
       end
@@ -32,8 +32,10 @@ module NotificationCenter
 
     def _with_cache event
       @cache ||= Set.new
-      yield unless @cache.include? event
-      @cache << event
+      unless @cache.include? event
+        yield
+        @cache << event
+      end
     end
   end
   self._initialize_event_store

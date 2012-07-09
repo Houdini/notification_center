@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    notification_center (0.1)
+    notification_center (0.2)
 
 GEM
   remote: http://rubygems.org/
