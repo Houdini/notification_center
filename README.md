@@ -11,7 +11,7 @@
 In your Gemfile
 
 ```ruby
-  gem 'notification_center', github: 'houdini/notification_center'
+gem 'notification_center', github: 'houdini/notification_center'
 ```
 
 
@@ -20,18 +20,18 @@ In your Gemfile
 In any class or multiple classes:
 
 ```ruby
-  class SomeClass
-    observe :some_event
+class SomeClass
+  observe :some_event
 
-    def some_event_handler # any number of args are possible
-    end
+  def some_event_handler # any number of args are possible
   end
+end
 ```
 
 Anywhere in code:
 
 ```ruby
-  NotificationCenter.post_notification :some_event
+NotificationCenter.post_notification :some_event
 ```
 
 ## Common practice
@@ -39,13 +39,12 @@ Anywhere in code:
 Create directory app/listeners and put classes listeners, like user_listener.rb
 
 ```ruby
-  class UserListener
-    observe :user_did_some_action
-
+class UserListener
+  observe :user_did_some_action
     def user_did_some_action_handler
-      # some complex logic
-    end
+    # some complex logic
   end
+end
 ```
 
 ## Important
@@ -54,5 +53,5 @@ Make sure, that your classes are preloaded!
 So for app/listeners, put this code to your application.rb
 
 ```ruby
-  Dir[Rails.root.join + 'app/listeners/*.rb'].map{|f| require f}
+Dir[Rails.root.join + 'app/listeners/*.rb'].map{|f| require f}
 ```
