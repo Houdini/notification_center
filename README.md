@@ -14,6 +14,13 @@ In your Gemfile
 gem 'notification_center', github: 'Houdini/notification_center'
 ```
 
+config/initializers/notification_center.rb
+
+```ruby
+NotificationCenter.configure do
+  enable_cache = true # only one event fired in one request scope, default is false
+end
+```
 
 ## Use
 
@@ -36,12 +43,13 @@ NotificationCenter.post_notification :some_event
 
 ## Common practice
 
-Create directory app/listeners and put classes listeners, like user_listener.rb
+Create directory app/listeners and put listeners there, like user_listener.rb
 
 ```ruby
 class UserListener
   observe :user_did_some_action
-    def user_did_some_action_handler
+  
+  def user_did_some_action_handler
     # some complex logic
   end
 end
@@ -54,4 +62,20 @@ So for app/listeners, put this code to your application.rb
 
 ```ruby
 Dir[Rails.root.join + 'app/listeners/*.rb'].map{|f| require f}
+```
+
+## For rspec
+
+In your spec_helper.rb
+
+```ruby
+require 'notification_center/rspec_helpers'
+```
+
+Then you can use notifications: false in describe, context, it. Like:
+
+```ruby
+describe User, notifications: false do
+
+it "should do smth", notifications: false do
 ```
