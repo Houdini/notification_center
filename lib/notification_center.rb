@@ -1,36 +1,40 @@
 require 'notification_center/core_ext/module'
+require 'notification_center/configuration'
 require 'set'
 
 module NotificationCenter
-  @@events = Hash.new Array.new
-  @@enable_notifications = true
-
+  extend Configuration
   class << self
     def events; @@events end
     def events= hash; @@events = hash end
 
-    def enable_notifications; @@enable_notifications = true end
-    def disable_notifications; @@enable_notifications = false end
-
     def flush_cache!; @cache = nil end
+    def _initialize_event_store
+      @@events = Hash.new Array.new
+    end
+    alias :forget_observers! :_initialize_event_store
 
     def post_notification *args
       event = args.shift
-
-      with_cache(event) do
-        event_handler = "#{event}_handler"
-        receivers = @@events[event]
-
-        for receiver in receivers
-          args.size == 0 ? receiver.send(event_handler) : receiver.send(event_handler, *args)
-        end
-      end if @@enable_notifications
+      if enable_notifications
+        enable_cache ? _with_cache(event){ _notify! event, *args } : _notify!(event, *args)
+      end
     end
 
-    def with_cache event
+    def _notify! event, *args
+      event_handler = "#{event}_handler"
+      receivers = @@events[event]
+
+      for receiver in receivers
+        receiver.send event_handler, *args
+      end
+    end
+
+    def _with_cache event
       @cache ||= Set.new
       yield unless @cache.include? event
       @cache << event
     end
   end
+  self._initialize_event_store
 end
