@@ -17,9 +17,7 @@ gem 'notification_center', github: 'Houdini/notification_center'
 config/initializers/notification_center.rb
 
 ```ruby
-NotificationCenter.configure do
-  enable_cache = true # only one event fired in one request scope, default is false
-end
+NotificationCenter.enable_cache = true # only one event fired in one request scope, default is false
 ```
 
 ## Use
