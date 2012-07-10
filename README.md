@@ -11,7 +11,7 @@
 In your Gemfile
 
 ```ruby
-gem 'notification_center', github: 'Houdini/notification_center'
+gem 'notification_center'
 ```
 
 config/initializers/notification_center.rb
