@@ -14,10 +14,18 @@ In your Gemfile
 gem 'notification_center'
 ```
 
+# Cache
+
+To enable cache, in your:
+
 config/initializers/notification_center.rb
 
 ```ruby
 NotificationCenter.enable_cache = true # only one event fired in one request scope, default is false
+```
+Dont forget to flush cache wach request, for this in your config/application.rb in config section:
+```ruby
+config.middleware.use NotificationCenter::Cache
 ```
 
 ## Use
