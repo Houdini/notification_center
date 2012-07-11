@@ -1,14 +1,12 @@
 require 'notification_center/core_ext/module'
 require 'notification_center/configuration'
-require 'set'
+require 'notification_center/cache'
 
 module NotificationCenter
   extend Configuration
   class << self
     def events; @@events end
     def events= hash; @@events = hash end
-
-    def flush_cache!; @cache = nil end
 
     def _initialize_event_store
       @@events = Hash.new Array.new
@@ -31,10 +29,9 @@ module NotificationCenter
     end
 
     def _with_cache event
-      @cache ||= Set.new
-      unless @cache.include? event
+      unless NotificationCenter::Cache.include? event
         yield
-        @cache << event
+        NotificationCenter::Cache << event
       end
     end
   end

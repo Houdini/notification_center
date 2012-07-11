@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe NotificationCenter do
   describe '.post_notification' do
-    before { NotificationCenter.flush_cache! }
+    before { NotificationCenter::Cache.flush_cache! }
 
     it "should fire event handler" do
       EventListener = Class.new { observe :event }
