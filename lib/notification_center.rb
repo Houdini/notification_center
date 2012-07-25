@@ -23,15 +23,15 @@ module NotificationCenter
     def _notify! event, *args
       event_handler = "#{event}_#{method_suffix}"
       receivers = @@events[event]
-      for receiver in receivers
-        receiver.send event_handler, *args
-      end
+      result = receivers.map{|receiver| receiver.send(event_handler, *args)}
+      return (result.size == 1 ? result[0] : result)
     end
 
     def _with_cache event
       unless NotificationCenter::Cache.include? event
-        yield
+        result = yield
         NotificationCenter::Cache << event
+        return result
       end
     end
   end
